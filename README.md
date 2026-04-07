@@ -132,7 +132,3 @@ If the resting ADC value changes due to a different mic or gain setting, run the
 - The value of staged integration testing — each component was verified independently before being combined
 
 ---
-
-## License
-
-MIT
