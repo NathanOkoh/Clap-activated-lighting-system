@@ -4,7 +4,7 @@
 #include "delay.h"
 
 // --- Internal us Delay ----------------------------------------------------
-// kept private — delay.h only provides ms, LCD init needs us precision
+// kept private â€” delay.h only provides ms, LCD init needs us precision
 static void LCD_delay_us(uint32_t us)
 {
     for (uint32_t i = 0; i < us * 36; i++)
