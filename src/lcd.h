@@ -4,14 +4,14 @@
 #include "stm32f10x.h"
 #include <stdint.h>
 
-// I2C address — default (A0/A1/A2 all HIGH)
+// I2C address â€” default (A0/A1/A2 all HIGH)
 #define LCD_ADDR             0x27
 
 // PCF8574 backpack pin mapping
 #define LCD_BACKLIGHT        0x08   // P3
 #define LCD_ENABLE           0x04   // P2
-#define LCD_RW               0x02   // P1 — always LOW (write only)
-#define LCD_RS               0x01   // P0 — 0=command, 1=data
+#define LCD_RW               0x02   // P1 â€” always LOW (write only)
+#define LCD_RS               0x01   // P0 â€” 0=command, 1=data
 
 // DDRAM row start addresses
 #define LCD_ROW0             0x80
