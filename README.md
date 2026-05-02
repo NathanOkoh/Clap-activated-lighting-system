@@ -1,6 +1,6 @@
 # Clap-activated-lighting-system
 
-A embedded system built on the STM32F103RB microcontroller that detects a double clap and toggles an LED. No RTOS, no HAL — written entirely in register-level C against the STM32 CMSIS headers.
+A embedded system built on the STM32F103RB microcontroller that detects a double clap audio input and toggles an LED based on a valid input. Written entirely in register-level C against the STM32 CMSIS headers.
 
 Press a button to arm the system. Clap twice within one second. The LED toggles, the buzzer confirms, and the LCD updates. Press again to disarm.
 
