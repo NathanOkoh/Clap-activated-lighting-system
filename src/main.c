@@ -1,5 +1,5 @@
 /* ================================================================
- *  main.c  —  Clap Detection Lighting System
+ *  main.c  â€”  Clap Detection Lighting System
  *  ENEL 351 Design Project 2026  |  STM32F103RB (NUCLEO)
  *
  *  HOW THE SYSTEM WORKS (big picture):
@@ -29,11 +29,11 @@
  * ================================================================ */
 
 #include "stm32f10x.h"
-#include "timer.h"       /* timer_init() — TIM2 at 1us tick              */
+#include "timer.h"       /* timer_init() â€” TIM2 at 1us tick              */
 #include "delay.h"       /* delay_ms(), delay_us()                        */
-#include "gpio.h"        /* gpio_init() — LED, buzzer, button pins        */
-#include "adc.h"         /* adc_init(), adc_read() — mic ADC on PA0      */
-#include "I2C.h"         /* i2c_init(), i2c_enable() — I2C1 PB6/PB7     */
+#include "gpio.h"        /* gpio_init() â€” LED, buzzer, button pins        */
+#include "adc.h"         /* adc_init(), adc_read() â€” mic ADC on PA0      */
+#include "I2C.h"         /* i2c_init(), i2c_enable() â€” I2C1 PB6/PB7     */
 #include "lcd.h"         /* LCD_init(), LCD_setCursor(), LCD_sendString() */
 
 /* ================================================================
@@ -59,7 +59,7 @@
  * ================================================================ */
 static volatile uint32_t ms_tick = 0;
 
-/* SysTick_Handler — called automatically every 1ms by hardware */
+/* SysTick_Handler â€” called automatically every 1ms by hardware */
 void SysTick_Handler(void)
 {
     ms_tick++;   /* increment the global millisecond counter */
@@ -71,7 +71,7 @@ static uint32_t get_ms(void)
 }
 
 /* ================================================================
- *  BUTTON READ  —  debounced, edge-detected
+ *  BUTTON READ  â€”  debounced, edge-detected
  *
  *  PA1 is HIGH at rest (internal pull-up).
  *  Pressing the button pulls PA1 LOW.
@@ -86,7 +86,7 @@ static uint8_t button_pressed(void)
     /* Read PA1: IDR_IDR1 is set when pin is HIGH (not pressed) */
     uint8_t raw = (GPIOA->IDR & GPIO_IDR_IDR1) ? 1 : 0;
 
-    if (raw == 0 && btn_prev == 1)          /* falling edge — button just pressed  */
+    if (raw == 0 && btn_prev == 1)          /* falling edge â€” button just pressed  */
     {
         delay_ms(BTN_DEBOUNCE_MS);          /* wait for mechanical bounce to settle */
 
@@ -94,18 +94,18 @@ static uint8_t button_pressed(void)
         if ((GPIOA->IDR & GPIO_IDR_IDR1) == 0)
         {
             btn_prev = 0;
-            return 1;   /* confirmed press — return 1 exactly once */
+            return 1;   /* confirmed press â€” return 1 exactly once */
         }
     }
 
     if (raw == 1)
-        btn_prev = 1;   /* button released — arm for next press detection */
+        btn_prev = 1;   /* button released â€” arm for next press detection */
 
     return 0;
 }
 
 /* ================================================================
- *  CLAP DETECTOR  —  call in the main loop as fast as possible
+ *  CLAP DETECTOR  â€”  call in the main loop as fast as possible
  *
  *  State machine with two states:
  *    clap_count = 0 ? waiting for first clap
@@ -114,7 +114,7 @@ static uint8_t button_pressed(void)
  *  On every call:
  *    1. Read ADC.
  *    2. Detect RISING edge (signal crosses threshold going up).
- *       Only rising edge counts — this is one clap onset.
+ *       Only rising edge counts â€” this is one clap onset.
  *    3. If first clap:  record timestamp, set clap_count = 1.
  *    4. If second clap: check gap is within window.
  *       If YES ? reset and return 1 (valid double-clap!).
@@ -161,11 +161,11 @@ static uint8_t detect_clap(void)
             }
             else if (gap > CLAP_WINDOW_MS)
             {
-                /* Too slow — treat this new clap as a fresh first clap */
+                /* Too slow â€” treat this new clap as a fresh first clap */
                 clap_count    = 1;
                 first_clap_ms = now;
             }
-            /* If gap < CLAP_MIN_GAP_MS: too fast — likely echo, ignore */
+            /* If gap < CLAP_MIN_GAP_MS: too fast â€” likely echo, ignore */
         }
     }
 
@@ -193,7 +193,7 @@ int main(void)
     gpio_init();    /* PA1 pull-up input, PA5/PA6 push-pull outputs       */
     adc_init();     /* ADC1 CH0 on PA0, 12-bit, calibrated                */
 
-    /* I2C and LCD — order matters:
+    /* I2C and LCD â€” order matters:
      *   i2c_init()   sets up PB6/PB7 and I2C1 peripheral registers
      *   i2c_enable() sets the PE (peripheral enable) bit in CR1
      *   delay_ms(200) gives the HD44780 LCD controller time to finish
@@ -210,7 +210,7 @@ int main(void)
     uint8_t led_on    = 0;   /* tracks current LED state for toggling     */
 
     /* -- Initial LCD display ------------------------------------------ */
-    /* LCD_setCursor(col, row) — col first, row second                   */
+    /* LCD_setCursor(col, row) â€” col first, row second                   */
     LCD_setCursor(0, 0);
     LCD_sendString("Not Listening");
     LCD_setCursor(0, 1);
@@ -247,7 +247,7 @@ int main(void)
                 LCD_sendString("Press button");
 
                 /* Wait for the user to physically release the button
-                 * before continuing — prevents immediately re-triggering
+                 * before continuing â€” prevents immediately re-triggering
                  * on the next loop iteration while finger is still down. */
                 while ((GPIOA->IDR & GPIO_IDR_IDR1) == 0)
                 {
@@ -292,6 +292,6 @@ int main(void)
                     LCD_sendString("Light: OFF  ");
             }
         }
-        /* No delay here — we want maximum ADC sampling rate (~500Hz) */
+        /* No delay here â€” we want maximum ADC sampling rate (~500Hz) */
     }
 }
